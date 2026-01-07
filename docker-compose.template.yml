@@ -78,6 +78,7 @@ services:
       AWS_ACCESS_KEY_ID: dummy
       AWS_SECRET_ACCESS_KEY: dummy
       AWS_ENDPOINT_URL_DYNAMODB: http://dynamodb-local:8000
+      NOTIFY_DATA_API_KEY: optoutrequest-658d1738-b6c2-426b-9215-a7a9b30ad44f-ec9bd43e-bf9b-41ef-9e11-43318a7d8c72
 
     links:
       - epb-auth-server
