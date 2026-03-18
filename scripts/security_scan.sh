@@ -18,7 +18,7 @@ SCAN_DATE=$(date +%F_%H%M)
 
 if [ ! -d "$DIR/../security-reports" ]; then mkdir -p "$DIR/../security-reports"; fi
 
-echo -e "-> Running baseline scan against the front end application";
+echo -e "-> Running Zap baseline scan against the frontend application";
 
 docker run -it \
   --network=epb-dev-tools_default \
@@ -30,9 +30,22 @@ docker run -it \
   -r "$SCAN_DATE-frontend-report.html" \
   -w "$SCAN_DATE-frontend-report.md"
 
-echo -e "-> Running api scan against the api using the api spec";
+  echo -e "-> Running Zap baseline scan against the EPC data frontend application";
 
-AUTH_TOKEN=$(curl -s -X POST http://epb-register-api/auth/oauth/token -H 'Content-Length: 0' -H 'Authorization: Basic NmY2MTU3OWUtZTgyOS00N2Q3LWFlZjUtN2QzNmFkMDY4YmVlOnRlc3QtY2xpZW50LXNlY3JldA==' | jq -r '.access_token')
+  docker run -it \
+    --network=epb-dev-tools_default \
+    --volume=$DIR/../security-reports:/zap/wrk  \
+    ghcr.io/zaproxy/zaproxy:stable \
+    zap-baseline.py \
+    -t http://epb-data-frontend/ \
+    -r "$SCAN_DATE-data-frontend-report.html" \
+    -w "$SCAN_DATE-data-frontend-report.md"
+
+echo -e "-> Running Zap api scan against the api using the api spec";
+
+# The auth header here is Base64 encoding of the security scan client ID and client secret defined in reset.sh
+# a084abff-c22d-4b78-875c-1e7b163c5ee3:security-scan-secret
+AUTH_TOKEN=$(curl -s -X POST http://epb-register-api/auth/oauth/token -H 'Content-Length: 0' -H 'Authorization: Basic YTA4NGFiZmYtYzIyZC00Yjc4LTg3NWMtMWU3YjE2M2M1ZWUzOnNlY3VyaXR5LXNjYW4tc2VjcmV0' | jq -r '.access_token')
 
 docker run -it \
   --network=epb-dev-tools_default \
