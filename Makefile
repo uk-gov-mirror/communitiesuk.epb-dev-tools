@@ -74,3 +74,5 @@ load-service-stats-data:
 	@docker compose up  -d --force-recreate --build epb-data-warehouse-db
 	@docker compose exec -T epb-data-warehouse bash -c 'cd /app && bundle exec rake db:migrate && make seed-stats-data'
 
+setup-hostsfile: ## Fallback for users without sudo access running initial setup
+	@$(SHELL) scripts/setup_hostsfile.sh

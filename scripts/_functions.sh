@@ -116,8 +116,14 @@ setup_hostsfile() {
   if grep -q "$HOSTS_LINE" "/etc/hosts"; then
     echo "Hostsfile configuration already there"
   else
-    echo "Injecting hostsfile configuration"
-    echo "$HOSTS_LINE" | sudo tee -a /etc/hosts
+    if sudo -n -v 2>/dev/null; then
+      echo "Injecting hostsfile configuration"
+      echo "$HOSTS_LINE" | sudo tee -a /etc/hosts
+    else
+      echo 
+      echo -e "\033[33mUnable to update the hosts file. Please use su to switch to a user with sudo permissions and run \033[1mmake setup-hostsfile\033[0m"
+      echo 
+    fi
   fi
 }
 
