@@ -91,7 +91,13 @@ Register
 * The upgrade to v7, has resulted in a few changes to how the application works
 * The default environment is no longer functional, instead there is a development 
 and production environment created when a new feature flag is created
-* To turn the feature flag, use the switch in the development environment
+* To create a feature flag locally (DO NOT DO THIS in our other environments), go into the epb-feature-flag db and run the following commands:
+
+`INSERT into features (name) VALUES ('<name-of-toggle>') ON CONFLICT (name) DO NOTHING;`
+
+`INSERT into feature_environments (environment, feature_name, enabled, variants) VALUES ('development', '<name-of-toggle>', false, '[]') ON CONFLICT (environment, feature_name) DO NOTHING;`
+
+* To turn the feature flag, in the feature flag app use the switch in the development environment
 
 ### Make File
 
@@ -114,6 +120,12 @@ To add test assessments into your database and data warehouse in docker, first e
 `make load-local-data`
 
 This lodges 63 different assessments, from varying schemas with different energy ratings.
+
+`make sql APP=<application>`
+
+e.g.`make sql APP==epb-register-api`
+
+Allows you to go into the database associated with the application.
 
 ## Running the security scan
 
