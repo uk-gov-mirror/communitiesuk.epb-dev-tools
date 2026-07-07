@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-POSTGRES_VERSION=17.5
+POSTGRES_VERSION=18.4
 
 pull_application() {
   CLONE_URL=$1
