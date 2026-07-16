@@ -1,6 +1,6 @@
 FROM ruby:3.4.9
 
-ENV LANG=en_GB.UTF-8
+ENV LANG=C.UTF-8
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
